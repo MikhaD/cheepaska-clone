@@ -39,15 +39,14 @@ const line = {from: {x: 0, y:0}, to: {x: 0, y: 0}};
 let drawing = false;
 
 cueCanvas.addEventListener("contextmenu", e => {
+	e.preventDefault();
+
 	const cx = e.clientX - rect.left;
 	const cy = e.clientY - rect.top;
 
-	bCtx.fillStyle = "#0008";
-	e.preventDefault();
-	bCtx.beginPath();
-	bCtx.arc(cx, cy, 12, 0, 6.3);
-	bCtx.fill();
-	balls.push(new Ball(cx, cy, 12));
+	const ball = new Ball(cx, cy, 12, "#0008");
+	paintBall(ball);
+	balls.push(ball);
 });
 
 cueCanvas.addEventListener("mousedown", e => {
@@ -78,43 +77,46 @@ cueCanvas.addEventListener("mousemove", e => {
 		const intercept = gradient*line.from.x + line.from.y;
 		// if pointing vertical
 		if (cx === line.from.x) {
-			// if pointing vertical up
-			if (cy > line.from.y) {
-				cCtx.lineTo(line.from.x, 0);
-			}
-			// if pointing vertical down
-			else {
-				cCtx.lineTo(line.from.x, cueCanvas.height);
-			}
+			line.to.x = line.from.x;
+			if (cy > line.from.y) { line.to.y = 0; }	// vertically up
+			else { line.to.y = cueCanvas.height; }		// vertically down
 		}
 		// if pointing up (quadrents 1 and 2)
 		else if (cy > line.from.y) {
-			cCtx.lineTo(intercept/gradient, 0);
+			line.to.x = intercept/gradient;
+			line.to.y = 0;
 		}
 		// if pointing down
 		else if (cy < line.from.y) {
 			// if pointing down to the right (quadrent 4)
 			if (cx < line.from.x) {
-				cCtx.lineTo(cueCanvas.width, -1*gradient*cueCanvas.width + intercept);
+				line.to.x = cueCanvas.width;
+				line.to.y = -1*gradient*cueCanvas.width + intercept;
 			}
 			// if pointing down to the left (quadrent 3)
 			else {
-				cCtx.lineTo(0, intercept);
+				line.to.x = 0;
+				line.to.y = intercept;
 			}
 		}
 		// if pointing horizontal
 		else {
-			// if pointing horizontally left
-			if (cx > line.from.x) {
-				cCtx.lineTo(0, line.from.y);
-			}
-			// if pointing horizontally right
-			else {
-				cCtx.lineTo(cueCanvas.width, line.from.y);
-			}
+			if (cx > line.from.x) { line.to.x = 0; }	// horizontally left
+			else { line.to.x = cueCanvas.width; }		// horizontally right
+			line.to.y = line.from.y;
 		}
+		cCtx.lineTo(line.to.x, line.to.y);
 		cCtx.closePath();
 		cCtx.stroke();
+
+		for (const ball of balls) {
+			if (ball.distanceToLine(line) < ball.r) {
+				paintBall(ball, "red");
+			}
+		}
+		if (balls.length > 0 && balls[0].distanceToLine(line) < balls[0].r) {
+			paintBall(balls[0].x, balls[0].y, balls[0].r, "red");
+		}
 
 		x.textContent = cx;
 		y.textContent = cy;
@@ -130,9 +132,21 @@ cueCanvas.addEventListener("mouseup", e => {
 });
 
 class Ball {
-	constructor(x, y, r) {
+	constructor(x, y, r, color) {
 		this.x = x;
 		this.y = y;
 		this.r = r;
+		this.color = color;
 	}
+
+	distanceToLine(line) {
+		return Math.abs((line.to.x-line.from.x)*(line.from.y-this.y) - (line.from.x-this.x)*(line.to.y-line.from.y))/Math.sqrt((line.to.x-line.from.x)**2+(line.to.y-line.from.y)**2);
+	}
+}
+
+function paintBall(ball, color) {
+	bCtx.fillStyle = color || ball.color;
+	bCtx.beginPath();
+	bCtx.arc(ball.x, ball.y, ball.r, 0, 6.3);
+	bCtx.fill();
 }
