@@ -17,7 +17,8 @@ body {
 
 #board {
 	height: 100%;
-	background-image: linear-gradient(45deg, rgb(0, 204, 255), rgb(226, 121, 230));
+	background-image: linear-gradient(45deg, #D6CADE, #CEDFCE);
+	// background-image: linear-gradient(45deg, rgb(0, 204, 255), rgb(226, 121, 230));
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: 1fr;
