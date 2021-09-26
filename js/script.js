@@ -8,12 +8,6 @@
 import Canvas from "./Canvas.js";
 import Ball from "./Ball.js";
 
-
-const x = document.querySelector("#x");
-const y = document.querySelector("#y");
-const m = document.querySelector("#m");
-const c = document.querySelector("#c");
-
 const balls = [];
 
 const vmin = Math.min(innerHeight, innerHeight) / 100;
@@ -51,9 +45,9 @@ document.addEventListener("mousedown", e => {
 });
 
 document.addEventListener("mousemove", e => {
+	const cx = cCanv.X(e.clientX);
+	const cy = cCanv.Y(e.clientY);
 	if (drawing) {
-		const cx = cCanv.X(e.clientX);
-		const cy = cCanv.Y(e.clientY);
 		const gradient = -1 * (cy - line.from.y) / (cx - line.from.x);
 		const intercept = gradient*line.from.x + line.from.y;
 
@@ -95,22 +89,33 @@ document.addEventListener("mousemove", e => {
 
 		for (const ball of balls) {
 			if (ball.distanceToLine(line) < ball.r) {
-				bCanv.paintBall(ball, "red");
+				cCanv.paintBall(ball, "red");
 			}
 		}
-		if (balls.length > 0 && balls[0].distanceToLine(line) < balls[0].r) {
-			bCanv.paintBall(balls[0].x, balls[0].y, balls[0].r, "red");
-		}
 
-		x.textContent = cx;
-		y.textContent = cy;
-		m.textContent = gradient;
-		c.textContent = intercept;
+		updateDebugData(cx, cy, gradient, intercept);
+	} else {
+		if (e.target.id === "cue") updateDebugData(cx, cy);
 	}
 });
 
 document.addEventListener("mouseup", e => {
 	if (e.button === 0) {
 		drawing = false;
+		cCanv.clear();
 	}
 });
+
+const updateDebugData = (function() {
+	const dx = document.querySelector("#x");
+	const dy = document.querySelector("#y");
+	const dm = document.querySelector("#m");
+	const dc = document.querySelector("#c");
+
+	return function(x, y, m, c) {
+		dx.textContent = x || 0;
+		dy.textContent = y || 0;
+		dm.textContent = m || 0;
+		dc.textContent = c || 0;
+	};
+})();

@@ -13,4 +13,8 @@ export default class Ball {
 	distanceToPoint(x, y) {
 		return Math.sqrt((this.x - x)**2 + (this.y - y)**2)
 	}
+
+	shoot(x, y, velocity) {
+		pass
+	}
 }
