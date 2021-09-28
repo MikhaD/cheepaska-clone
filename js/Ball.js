@@ -5,12 +5,12 @@ export default class Ball {
 		this.y = y;
 		this.r = r;
 		this.color = color;
-		
+
 		Ball.instances.push(this);
 	}
 
 	distanceToLine(line) {
-		return Math.abs((line.x2-line.x1)*(line.y1-this.y) - (line.x1-this.x)*(line.y2-line.y1))/Math.sqrt((line.x2-line.x1)**2+(line.y2-line.y1)**2);
+		return Math.abs((line.x2 - line.x1) * (line.y1 - this.y) - (line.x1 - this.x) * (line.y2 - line.y1)) / Math.sqrt((line.x2 - line.x1) ** 2 + (line.y2 - line.y1) ** 2);
 	}
 
 	distanceToPoint(x, y) {
@@ -18,7 +18,7 @@ export default class Ball {
 	}
 
 	distanceToPointSquared(x, y) {
-		return (this.x - x)**2 + (this.y - y)**2;
+		return (this.x - x) ** 2 + (this.y - y) ** 2;
 	}
 
 	/**
@@ -46,15 +46,15 @@ export default class Ball {
 	centerAtCollision(line, distToLine) {
 		let x, y;
 		distToLine = distToLine || this.distanceToLine(line);
-		if (distToLine < this.r*2) {	
+		if (distToLine < this.r * 2) {
 			const t = (
-				Math.sqrt(this.distanceToPointSquared(line.x1, line.y1) - distToLine**2) -
-				Math.sqrt((this.r*2)**2 - distToLine**2)
-				) / line.length();
+				Math.sqrt(this.distanceToPointSquared(line.x1, line.y1) - distToLine ** 2) -
+				Math.sqrt((this.r * 2) ** 2 - distToLine ** 2)
+			) / line.getLength();
 
-			const x = ((1-t)*line.x1+t*line.x2); 
-			const y = ((1-t)*line.y1+t*line.y2); 
-			return {x, y};
+			const x = ((1 - t) * line.x1 + t * line.x2);
+			const y = ((1 - t) * line.y1 + t * line.y2);
+			return { x, y };
 		}
 		return null;
 	}

@@ -45,17 +45,3 @@ document.addEventListener("mouseup", e => {
 		game.cCanv.clear();
 	}
 });
-
-const updateDebugData = (function () {
-	const dx = document.querySelector("#x");
-	const dy = document.querySelector("#y");
-	const dm = document.querySelector("#m");
-	const dc = document.querySelector("#c");
-
-	return function (x, y, m, c) {
-		dx.textContent = x || 0;
-		dy.textContent = y || 0;
-		dm.textContent = m || 0;
-		dc.textContent = c || 0;
-	};
-})();

@@ -5,6 +5,9 @@ export default class Line {
 		this.x2 = x2;
 		this.y2 = y2;
 		this.gradient = null;
+		this.intercept = null;
+		this.lengthSquared = null;
+		this.length = null;
 	}
 
 	/**
@@ -29,12 +32,18 @@ export default class Line {
 		return quadrent;
 	}
 
-	length() {
-		return Math.sqrt(this.lengthSquared());
+	getLength() {
+		if (!this.length) {
+			this.length = Math.sqrt(this.getLengthSquared());
+		}
+		return this.length;
 	}
 
-	lengthSquared() {
-		return (this.x1 - this.x2) ** 2 + (this.y1 - this.y2) ** 2
+	getLengthSquared() {
+		if (!this.lengthSquared) {
+			this.lengthSquared = (this.x1 - this.x2) ** 2 + (this.y1 - this.y2) ** 2;
+		}
+		return this.lengthSquared;
 	}
 
 	/**
@@ -53,7 +62,10 @@ export default class Line {
 	 * @returns The y-intercept of the line
 	 */
 	getIntercept() {
-		return this.getGradient() * this.x1 + this.y1;
+		if (!this.intercept) {
+			this.intercept = this.getGradient() * this.x1 + this.y1;
+		}
+		return this.intercept;
 	}
 
 	/**
@@ -94,5 +106,17 @@ export default class Line {
 			y = this.y1;
 		}
 		return new Line(this.x1, this.y1, x, y);
+	}
+
+	/**
+	 * Find the coordinates of the point a given distance along the line
+	 * @param {Number} distance The distance along the line, distance <= line.getLength()
+	 * @returns {*} {x, y}
+	 */
+	pointAtDistance(distance) {
+		const t = distance / this.getLength();
+		const x = ((1 - t) * this.x1 + t * this.x2);
+		const y = ((1 - t) * this.y1 + t * this.y2);
+		return { x, y };
 	}
 }
