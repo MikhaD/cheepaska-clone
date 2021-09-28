@@ -1,6 +1,7 @@
 ## To Do
-- [ ] Stop balls from thinking they're being colided with the back of the cue
-- [ ] Give balls shadows
+- [x] Stop balls from thinking they're being colided with the back of the cue
+- [x] Give balls shadows
+- [x] Create a game class that can be initialized with all the variable data such as radius, line width, debug mode etc
 - [ ] Add power levels (35 levels)
 - [ ] Add power level indicator
 - [ ] Add next trajectory line for the ball after collision
@@ -15,3 +16,4 @@
 - [x] Seperate javascript into semantic classes
 - [x] Use squared values instead of the sqrt function wherever possible to improve speed
 - [x] Make balls array into a static variable of the Ball class
+- [ ] Make ball array into a property of the game class
