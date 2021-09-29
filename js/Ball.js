@@ -47,14 +47,10 @@ export default class Ball {
 		let x, y;
 		distToLine = distToLine || this.distanceToLine(line);
 		if (distToLine < this.r * 2) {
-			const t = (
+			return line.pointAtDistance(
 				Math.sqrt(this.distanceToPointSquared(line.x1, line.y1) - distToLine ** 2) -
 				Math.sqrt((this.r * 2) ** 2 - distToLine ** 2)
-			) / line.getLength();
-
-			const x = ((1 - t) * line.x1 + t * line.x2);
-			const y = ((1 - t) * line.y1 + t * line.y2);
-			return { x, y };
+			);
 		}
 		return null;
 	}

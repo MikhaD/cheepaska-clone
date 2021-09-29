@@ -9,9 +9,9 @@ const margin = 5 * vmin;
 
 const cueCanvas = new Canvas(document.querySelector("#cue"), width + 2 * margin, height + 2 * margin);
 const ballCanvas = new Canvas(document.querySelector("#balls"), width + 2 * margin, height + 2 * margin);
-ballCanvas.setShadow("#000", 5);
 
 const game = new Game(ballCanvas, cueCanvas, 20, 5, true);
+
 game.addBalls();
 
 cueCanvas.addEventListener("contextmenu", e => {
@@ -42,6 +42,6 @@ document.addEventListener("mousemove", (e) => game.aim(e));
 document.addEventListener("mouseup", e => {
 	if (e.button === 0) {
 		game.drawing = false;
-		game.cCanv.clear();
+		game.shoot();
 	}
 });

@@ -46,7 +46,7 @@ export default class Canvas {
 	 * @param {String} color The color of the line (black by default)
 	 */
 	paintDottedLine(line, width, distance, color) {
-		this.ctx.setLineDash([1, distance || 10]);
+		this.ctx.setLineDash([0, distance || 10]);
 		this.__paintLine__(line, width, color);
 	}
 
@@ -59,6 +59,28 @@ export default class Canvas {
 		this.ctx.stroke();
 	}
 
+	/**
+	 * Draw a shape to the canvas represented as a Path2D path
+	 * @param {Path2D} path The Path2D object to draw to the canvas
+	 * @param {String} color The fill color of the shape (defualt: black)
+	 */
+	fillPath(path, color) {
+		this.ctx.fillStyle = color || "black";
+		this.ctx.fill(path);
+	}
+
+	/**
+	 * Draw a shape to the canvas represented as a Path2D path
+	 * @param {Path2D} path The Path2D object to draw to the canvas
+	 * @param {String} color The outline color of the shape (defualt: black)
+	 * @param {Number} width The width of the outline of the shape (default: 1)
+	 */
+	strokePath(path, color, width) {
+		this.ctx.lineWidth = width || 1;
+		this.ctx.strokeStyle = color || "black";
+		this.ctx.stroke(path);
+	}
+
 	addEventListener(event, callback) {
 		this.canvas.addEventListener(event, callback);
 	}
@@ -67,6 +89,13 @@ export default class Canvas {
 		this.ctx.lineWidth = width;
 	}
 
+	/**
+	 * Define the shadow for all future draws to the canvas
+	 * @param {String} color The color of the shadow (default: black)
+	 * @param {Number} blur The shadow blur (default: 0)
+	 * @param {Number} xOffset The shadow's horizontal offset (defualt: 0)
+	 * @param {Number} yOffset The shadow's vertical offset (default: 0)
+	 */
 	setShadow(color, blur, xOffset, yOffset) {
 		this.ctx.shadowColor = color || "black";
 		this.ctx.shadowBlur = blur || 0;

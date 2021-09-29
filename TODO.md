@@ -2,8 +2,9 @@
 - [x] Stop balls from thinking they're being colided with the back of the cue
 - [x] Give balls shadows
 - [x] Create a game class that can be initialized with all the variable data such as radius, line width, debug mode etc
-- [ ] Add power levels (35 levels)
-- [ ] Add power level indicator
+- [x] Add power levels (35 levels)
+- [x] Add power level indicator
+- [ ] Add cue instead of line behind ball
 - [ ] Add next trajectory line for the ball after collision
 - [ ] Add trajectory to hit ball
 - [ ] Recursively add trajectories to all balls assuing no other balls move
