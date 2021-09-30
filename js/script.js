@@ -12,7 +12,11 @@ const ballCanvas = new Canvas(document.querySelector("#balls"), width + 2 * marg
 
 const game = new Game(ballCanvas, cueCanvas, 20, 5, true);
 
-game.addBalls();
+game.addBall(new Ball(293, 407, game.radius, "#CE928C"));
+game.addBall(new Ball(406, 422, game.radius, "#CE928C"));
+game.addBall(new Ball(268, 212, game.radius, "#CE928C"));
+game.addBall(new Ball(123, 266, game.radius, "#CE928C"));
+game.addBall(new Ball(292, 82, game.radius, "#CE928C"));
 
 cueCanvas.addEventListener("contextmenu", e => {
 	e.preventDefault();

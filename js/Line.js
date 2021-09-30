@@ -4,8 +4,10 @@ export default class Line {
 		this.y1 = y1;
 		this.x2 = x2;
 		this.y2 = y2;
-		this.gradient = null;
-		this.intercept = null;
+		this.rise = y1-y2;
+		this.run = x2-x1;
+		this.gradient = this.rise/this.run;
+		this.intercept = this.gradient*x1 + y1;
 		this.lengthSquared = null;
 		this.length = null;
 	}
@@ -23,15 +25,13 @@ export default class Line {
 		//   1 | 2 
 		//  ---○---
 		//   3 | 4 
-		let quadrent;
-
-		if (y <= yOrigin) { quadrent = 1; }
-		else { quadrent = 3; }
-
-		if (x > xOrigin) { quadrent += 1; }
-		return quadrent;
+		return 1 + (x>xOrigin) + 2*(y>yOrigin);
 	}
 
+	/**
+	 * Calculate and return the length of the line. Calculation done in function instead of constructor for efficiency in case length isn't needed
+	 * @returns {Number} The length of the line
+	 */
 	getLength() {
 		if (!this.length) {
 			this.length = Math.sqrt(this.getLengthSquared());
@@ -39,33 +39,15 @@ export default class Line {
 		return this.length;
 	}
 
+	/**
+	 * Calculate and return the square of the length of the line. Calculation done in function instead of constructor for efficiency in case length isn't needed. Length uses the sqrt function which is expensive and isn't always neccessary. Comparing two lengths to see which is longer, for example, works with the squares or the lengths.
+	 * @returns {Number} The length of the line squared
+	 */
 	getLengthSquared() {
 		if (!this.lengthSquared) {
-			this.lengthSquared = (this.x1 - this.x2) ** 2 + (this.y1 - this.y2) ** 2;
+			this.lengthSquared = this.rise ** 2 + this.run ** 2;
 		}
 		return this.lengthSquared;
-	}
-
-	/**
-	 * Calculate the gradient of the line and return it. Calculation done in function instead of constructor for efficiency in case gradient isn't needed
-	 * @returns The gradient of the line
-	 */
-	getGradient() {
-		if (!this.gradient) {
-			this.gradient = -1 * (this.y2 - this.y1) / (this.x2 - this.x1);
-		}
-		return this.gradient;
-	}
-
-	/**
-	 * Calculate the y-intercept of the line and return it. Calculation done in function instead of constructor for efficiency in case y-intercept isn't needed
-	 * @returns The y-intercept of the line
-	 */
-	getIntercept() {
-		if (!this.intercept) {
-			this.intercept = this.getGradient() * this.x1 + this.y1;
-		}
-		return this.intercept;
 	}
 
 	/**
@@ -83,7 +65,7 @@ export default class Line {
 		}
 		// if pointing up (quadrents 1 and 2)
 		else if (this.y2 > this.y1) {
-			x = this.getIntercept() / this.getGradient();
+			x = this.intercept / this.gradient;
 			y = 0;
 		}
 		// if pointing down
@@ -91,12 +73,12 @@ export default class Line {
 			// if pointing down to the right (quadrent 4)
 			if (this.x2 < this.x1) {
 				x = canvas.getWidth();
-				y = -1 * this.getGradient() * canvas.getWidth() + this.getIntercept();
+				y = -1 * this.gradient * canvas.getWidth() + this.intercept;
 			}
 			// if pointing down to the left (quadrent 3)
 			else {
 				x = 0;
-				y = this.getIntercept();
+				y = this.intercept;
 			}
 		}
 		// if pointing horizontal
